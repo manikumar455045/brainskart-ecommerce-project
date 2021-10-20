@@ -182,7 +182,6 @@ userRouter.post('/address' , VerifyToken , [
 //GoogleLogin
 userRouter.post("/GoogleLogin" , async (request : express.Request , response : express.Response) => {
     const { tokenID } = request.body;
-    console.log(request);
     client.verifyIdToken({idToken : tokenID , audience : "509138529581-4u7c810o2a9kovq85cpirkijsk1s4a88.apps.googleusercontent.com"}).then(async (gresponse) => {
         let GoogleUser: any = gresponse.getPayload();
         let {email_verified , email , name , picture} = GoogleUser;

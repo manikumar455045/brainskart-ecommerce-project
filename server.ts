@@ -42,7 +42,7 @@ app.use(cors());
 const port = process.env.PORT || 5000;
 
 app.get('/' , (request : express.Request, response : express.Response ) => {
-    response.status(200).send("<h2>Welcome To Brsins kart backend</h2>")
+    response.status(200).send("<h2>Welcome To Brains kart backend REST API</h2>")
 });
 
 //configure router

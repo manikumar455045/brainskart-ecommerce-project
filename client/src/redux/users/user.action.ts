@@ -150,21 +150,22 @@ export const updateAddress = (address : IAddress) => {
     }
 }
 //google login or signup
-export const googleLogin = (tokenID : string , history : any) => {
+export const googleLogin = (tokenID : any , history : any) => {
     return async (dispatch : any) => {
         dispatch({
             type : GOOGLE_REGISTER_REQUEST
         })
         try{
             let dataUrl : string | undefined = `${process.env.REACT_APP_SERVER_URL}/api/users/GoogleLogin`
-            console.log(tokenID)
-            let response = await axios.post(dataUrl , tokenID)
+            let response = await axios.post(dataUrl , {tokenID})
+            console.log(response);
             dispatch({
                 type : GOOGLE_REGISTER_SUCCESS,
                 payload : {
                     token : response.data.token
                 }
             })
+            dispatch(getUserInfo())
             dispatch(alertActions.displayAlert(response.data.msg , "success"));
             history.push("/");
         }
@@ -175,7 +176,7 @@ export const googleLogin = (tokenID : string , history : any) => {
                     error : error
                 }
             })
-            dispatch(alertActions.displayAlert(error , "danger"))
+            dispatch(alertActions.displayAlert(error.message , "danger"))
             console.log(error)
         }
     }

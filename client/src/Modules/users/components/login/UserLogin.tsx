@@ -61,7 +61,7 @@ let UserLogin : React.FC<IProps> = () => {
         dispatch(userActions.loginUser(user , history));
     }
     let handleGoogleLogin = (response : any) => {
-        dispatch(userActions.googleLogin(response.tokenObj.id_token, history))
+        dispatch(userActions.googleLogin(response.tokenId, history))
     }
     let handleGoogleLoginFailure = (response: any) => {
         console.log(response)
