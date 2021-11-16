@@ -19,6 +19,7 @@
     "@types/jsonwebtoken": "^8.5.4",
     "@types/mongoose": "^5.11.97",
     "@types/stripe": "^8.0.417",
+    "@types/uuid": "^8.3.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -28,6 +29,7 @@
     "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.2",
-    "stripe": "^8.160.0"
+    "stripe": "^8.160.0",
+    "uuid": "^8.3.2"
   }
 }

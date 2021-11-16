@@ -62,14 +62,15 @@ let UserLogin : React.FC<IProps> = () => {
     }
     let handleGoogleLogin = (response : any) => {
         dispatch(userActions.googleLogin(response.tokenId, history))
+        console.log(response)
     }
     let handleGoogleLoginFailure = (response: any) => {
         console.log(response)
     }
     return(
         <React.Fragment>
-            <pre>{JSON.stringify(user)}</pre>
-            <pre>{JSON.stringify(userError)}</pre>
+            {/*<pre>{JSON.stringify(user)}</pre>
+            <pre>{JSON.stringify(userError)}</pre>*/}
             <section className="mt-3">
                 <div className="container">
                     <div className="row text-center">

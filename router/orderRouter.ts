@@ -5,6 +5,9 @@ import { IOrder } from '../Models/IOrder';
 import { IUser } from '../Models/IUser';
 import orderTable from '../Models/Order';
 import userTable from '../Models/User';
+import cors from "cors";
+
+
 
 const orderRouter : express.Router = express.Router();
 
@@ -38,7 +41,7 @@ orderRouter.post('/place' , VerifyToken , [
             total : total
         })
         order = await order.save();
-        response.status(200).json({msg : "Order placed successfully"});
+        response.status(200).json({msg : "Order placed successfully" , order : order});
     }
     catch(error){
         console.error(error);
@@ -65,6 +68,7 @@ orderRouter.get('/' , VerifyToken , async (request : express.Request , response 
         let user  : any = request.headers['user'];
         let requestUser : IUser = await userTable.findById(user.id);
         let orders : IOrder[] = await orderTable.find({email : requestUser.email});
+        /*console.log(orders)*/
         response.status(200).json({orders: orders});
     }
     catch(error){

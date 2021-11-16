@@ -1,18 +1,21 @@
 import * as OrderActions from './orders.action';
 import {IProduct} from "../../Modules/products/Models/IProduct";
+import {IOrder} from "../../Modules/orders/IOrders";
 
 
 
 export interface orderState {
     loading : boolean,
     cartItems : IProduct[],
-    orders : IProduct[],
+    order : IOrder,
+    orderList : IOrder[],
     errorMessage : string
 }
 let initialState : orderState = {
     loading : false,
     cartItems : [] as IProduct[],
-    orders : [] as IProduct[],
+    order : {} as IOrder,
+    orderList : [] as IOrder[],
     errorMessage : ''
 }
 
@@ -67,6 +70,63 @@ export  const reducer = (state = initialState , action : any) : orderState => {
             return {
                 ...state,
                 cartItems : [...updatedCartItems]
+            }
+        // Make Stripe Payments
+        case OrderActions.MAKE_PAYMENT_REQUEST:
+            return {
+                ...state,
+                loading : true
+            };
+        case OrderActions.MAKE_PAYMENT_SUCCESS:
+            return {
+                ...state,
+                loading : false
+            };
+        case OrderActions.MAKE_PAYMENT_FAILURE:
+            return {
+                ...state,
+                loading : false,
+                errorMessage : action.payload
+            };
+        case OrderActions.PLACE_ORDER_REQUEST :
+            return {
+                ...state,
+                loading : true
+            }
+        case OrderActions.PLACE_ORDER_SUCCESS :
+            return {
+                ...state,
+                order : action.payload,
+                loading : false
+            }
+        case OrderActions.PLACE_ORDER_FAILURE :
+            return {
+                ...state,
+                loading : false,
+                errorMessage : action.payload
+            }
+        case OrderActions.CLEAR_CART :
+            return {
+                ...state,
+                cartItems : [],
+                order : {} as IOrder
+            }
+        case OrderActions.GET_ALL_ORDERS_REQUEST :
+            return {
+                ...state,
+                loading : true
+            }
+        case OrderActions.GET_ALL_ORDERS_SUCCESS :
+            return {
+                ...state,
+                loading : false,
+                orderList : action.payload
+            }
+        case OrderActions.GET_ALL_ORDERS_FAILURE :
+            return {
+                ...state,
+                loading : false,
+                errorMessage : action.payload
             }
         default : return state
     }

@@ -57,11 +57,18 @@ let Navbar : React.FC<IProps> = () => {
                                </li>
                            }
                            {
-                               AuthUtil.isLoggedIn() && userState.isAuthenticated &&
+                               AuthUtil.isLoggedIn() && userState.isAuthenticated && userState.user.isAdmin&&
                                <li className="nav-item">
                                    <NavLink to="/products/upload" className="nav-link">Upload</NavLink>
                                </li>
                            }
+                           {
+                               AuthUtil.isLoggedIn() && userState.isAuthenticated&&
+                               <li className="nav-item">
+                                   <NavLink to="/orders/list" className="nav-link">My Orders</NavLink>
+                               </li>
+                           }
+
 
                        </ul>
                        <div className="d-flex">

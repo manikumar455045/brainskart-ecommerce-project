@@ -71,16 +71,16 @@ let UserRegister : React.FC<IProps> = () => {
         event.preventDefault();
         dispatch(userActions.userRegister(userState , history));
     }
-    let handleGoogleRegister = () => {
-
+    let handleGoogleLogin = (response : any) => {
+        dispatch(userActions.googleLogin(response.tokenId, history))
     }
-    let handleGoogleRegisterFailure = () => {
-
+    let handleGoogleLoginFailure = (response: any) => {
+        console.log(response)
     }
     return(
         <React.Fragment>
-            <pre>{JSON.stringify(userState)}</pre>
-            <pre>{JSON.stringify(userErrorState)}</pre>
+            {/*<pre>{JSON.stringify(userState)}</pre>
+            <pre>{JSON.stringify(userErrorState)}</pre>*/}
             <section className="mt-3">
                 <div className="container">
                     <div className="row text-center">
@@ -103,7 +103,12 @@ let UserRegister : React.FC<IProps> = () => {
                                         </div>
                                         <button type="submit" className="btn btn-dark mb-3">Submit</button>
                                         <hr/>
-
+                                        <GoogleLogin
+                                            clientId="509138529581-4u7c810o2a9kovq85cpirkijsk1s4a88.apps.googleusercontent.com"
+                                            onSuccess={handleGoogleLogin}
+                                            onFailure={handleGoogleLoginFailure}
+                                            buttonText="Google Login"
+                                        />
                                         <div className="mt-3">
                                            <span>Already have an account?
                                            <Link to="/users/login">Login</Link>

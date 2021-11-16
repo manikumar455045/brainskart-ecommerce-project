@@ -1,10 +1,12 @@
 import React from "react";
 import * as userReducer from '../../../../redux/users/user.reducer';
 import * as orderReducer from '../../../../redux/orders/orders.reducer';
-import {useSelector} from "react-redux";
-import {Link} from 'react-router-dom';
-import {removeCartItem} from "../../../../redux/orders/orders.action";
+import * as orderActions from '../../../../redux/orders/orders.action';
+import {useSelector , useDispatch} from "react-redux";
+import {Link, useHistory} from 'react-router-dom';
 import {calculateGrandTotal, calculateTax, calculateTotal} from "../../../../CartFunctions";
+import StripeCheckout from "react-stripe-checkout"
+import product from "../../../../../../Models/product";
 
 interface IProps{
 
@@ -19,12 +21,49 @@ interface IOrder {
 
 
 let Checkout : React.FC<IProps> = () => {
+    let dispatch = useDispatch();
+    let history = useHistory();
     let userState : userReducer.UserState = useSelector((state : IUser) => {
         return state.users
     })
     let orderState : orderReducer.orderState = useSelector((state : IOrder) => {
         return state.orders
     })
+
+
+    // @ts-ignore
+    let handlePayment = (token? , addresses?) => {
+       /* console.log(token)*/
+        /*console.log(addresses)*/
+        const body = {
+            product : {
+                name : `${orderState.cartItems[0].name} and others`,
+                amount : calculateGrandTotal(orderState.cartItems)*100,
+                currency : 'INR',
+            },
+            customer : {
+                name : userState.user.name
+            },
+            description : "Shopping from BrainsKart",
+            email : token.email,
+            source : token.id,
+            stripeTokenType : token.type
+        }
+        let items = orderState.cartItems.map((product) =>{
+            return{
+                name : product.name,
+                brand : product.brand,
+                price : product.price,
+                qty : product.qty
+            }
+        } )
+        let order = {
+            items : items,
+            tax : calculateTax(orderState.cartItems),
+            total : calculateGrandTotal(orderState.cartItems)
+        }
+        dispatch(orderActions.makeStripePayment(body , history, order))
+    }
     return(
         <React.Fragment>
             {/*<pre>{JSON.stringify(userState)}</pre>
@@ -66,14 +105,14 @@ let Checkout : React.FC<IProps> = () => {
                                 <form>
                                     <div className="form-check">
                                         <input className="form-check-input" type="radio" name="flexRadioDefault"
-                                               id="flexRadioDefault1"/>
+                                               id="flexRadioDefault1" disabled/>
                                         <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                            Cash On Delivery
+                                            Cash On Delivery - Currently unavailable
                                         </label>
                                     </div>
                                     <div className="form-check">
                                         <input className="form-check-input" type="radio" name="flexRadioDefault"
-                                               id="flexRadioDefault2"/>
+                                               id="flexRadioDefault2" checked={true}/>
                                         <label className="form-check-label" htmlFor="flexRadioDefault2">
                                             Credit Card Payment
                                         </label>
@@ -109,11 +148,22 @@ let Checkout : React.FC<IProps> = () => {
                                             })
                                     }
                                 </ul>
-                                <ul className="list-group">
+                                <ul className="list-group mb-3">
                                     <li className="list-group-item">Total : {calculateTotal(orderState.cartItems)} </li>
                                     <li className="list-group-item">Tax : {calculateTax(orderState.cartItems)} </li>
                                     <li className="list-group-item">Grand Total : {calculateGrandTotal(orderState.cartItems)} </li>
                                 </ul>
+                                <StripeCheckout
+                                    token={handlePayment}
+                                    name="Stripe Payment"
+                                    stripeKey={process.env.REACT_APP_STRIPE_KEY as string}
+                                    description="Pay with Stripe"
+                                    amount = {calculateGrandTotal(orderState.cartItems)*100}
+                                    currency="INR"
+                                    zipCode
+                                    panelLabel="pay for {{amount}}"
+                                >
+                                </StripeCheckout>
                             </div>
                         </div>
                     </div>
