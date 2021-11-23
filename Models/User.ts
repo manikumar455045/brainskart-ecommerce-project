@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+import mongoose, {Model} from 'mongoose';
+import {IUser} from "./IUser";
 
 let UserSchema = new mongoose.Schema({
     name : {type : String , required : true },

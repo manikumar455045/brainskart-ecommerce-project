@@ -19,6 +19,8 @@ const client = new OAuth2Client("509138529581-4u7c810o2a9kovq85cpirkijsk1s4a88.a
 @access : public
 */
 
+
+
 userRouter.post('/register' , [
     body('name').not().isEmpty().withMessage("Name is required"),
     body('email').not().isEmpty().withMessage("email is required"),
@@ -32,7 +34,7 @@ userRouter.post('/register' , [
         let {name, email , password} = request.body;
 
         //check if email exists
-        let user = await userTable.findOne({email : email})
+        let user : IUser | null = await userTable.findOne({email : email})
         console.log(user)
         if(user){
             return response.status(401).json({
@@ -51,6 +53,7 @@ userRouter.post('/register' , [
             d : 'mm'
         })
 
+        // @ts-ignore
         let newUser : IUser = await userTable.create({name, email , password : hash , avatar , address});
 
         response.status(200).json({
@@ -70,6 +73,8 @@ userRouter.post('/register' , [
 
 });
 
+
+
 /*
 @info : login a user
 @url : "http://127.0.0.1:5000/api/users/login"
@@ -77,6 +82,7 @@ userRouter.post('/register' , [
 @fields : email, password
 @access : public
 */
+
 
 userRouter.post('/login' , [
     body('email').not().isEmpty().withMessage("email is required"),
@@ -127,6 +133,7 @@ userRouter.post('/login' , [
 
 })
 
+
 /*
 @info : Get user info
 @url : "http://127.0.0.1:5000/api/users/"
@@ -138,7 +145,7 @@ userRouter.post('/login' , [
 userRouter.get('/' , VerifyToken , async (request : express.Request , response : express.Response) => {
     try{
         let id : any = request.headers['user'];
-        let user : IUser = await userTable.findById(id.id);
+        let user : IUser | null = await userTable.findById(id.id);
         response.status(200).json(user);
     }
     catch(error){
@@ -173,23 +180,26 @@ userRouter.post('/address' , VerifyToken , [
 
     let newAddress : IAddress = {flat : flat, street : street, landmark : landmark, city : city, state : state, country : country, pin : pin, phone : phone}
     let reqUser : any = request.headers['user'];
-    let user = await userTable.findById(reqUser.id);
+    let user : IUser | null = await userTable.findById(reqUser.id);
+    // @ts-ignore
     user.address = newAddress;
+    // @ts-ignore
     await user.save(); // update to database
     response.status(200).json({msg : 'Address is updated'})
 })
 
 //GoogleLogin
+
 userRouter.post("/GoogleLogin" , async (request : express.Request , response : express.Response) => {
     const { tokenID } = request.body;
-    console.log(tokenID)
+    /*console.log(tokenID)*/
     client.verifyIdToken({idToken : tokenID , audience : "509138529581-4u7c810o2a9kovq85cpirkijsk1s4a88.apps.googleusercontent.com"}).then(async (gresponse) => {
         let GoogleUser: any = gresponse.getPayload();
         let {email_verified , email , name , picture} = GoogleUser;
         if(email_verified){
-            let user : IUser = await userTable.findOne({email : email})
+            let user : IUser | null = await userTable.findOne({email : email})
             if(user){
-                console.log("true")
+                /*console.log("true")*/
                 //user already logged in before with gmail
                 let payload = {
                     user: {
@@ -213,6 +223,7 @@ userRouter.post("/GoogleLogin" , async (request : express.Request , response : e
                 let password = name+email;
                 let salt = await bcrypt.genSalt(10);
                 let hash = await bcrypt.hash(password , salt);
+                // @ts-ignore
                 let newUser : IUser = new userTable({name : name, email : email , password : hash , avatar : avatar , address : address});
                 await newUser.save();
                 let payload = {
@@ -239,6 +250,7 @@ userRouter.post("/GoogleLogin" , async (request : express.Request , response : e
         })
     })
 })
+
 
 
 export default userRouter;

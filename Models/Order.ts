@@ -17,5 +17,6 @@ let orderSchema : Schema = new mongoose.Schema({
     ]
 } , {timestamps : true});
 
+// @ts-ignore
 const orderTable : Model<IOrder> = mongoose.model( 'Order', orderSchema);
 export default orderTable

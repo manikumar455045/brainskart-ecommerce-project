@@ -33,6 +33,7 @@ productRouter.post('/upload' , VerifyToken , [
 
         let {name, brand, price, qty, image, category, description, usage } = request.body;
 
+        // @ts-ignore
         let newProduct : IProduct = await productTable.create({name , brand , price, qty, image , category, description , usage });
 
         response.status(200).json({msg : 'Product created successfully'})

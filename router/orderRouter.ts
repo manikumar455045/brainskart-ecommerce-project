@@ -31,6 +31,7 @@ orderRouter.post('/place' , VerifyToken , [
         }
         let {items , tax, total} = request.body;
         let user  : any = request.headers['user'];
+        // @ts-ignore
         let requestUser : IUser = await userTable.findById(user.id);
         let order : IOrder = new orderTable({
             name : requestUser.name,
@@ -66,6 +67,7 @@ orderRouter.post('/place' , VerifyToken , [
 orderRouter.get('/' , VerifyToken , async (request : express.Request , response : express.Response) => {
     try{
         let user  : any = request.headers['user'];
+        // @ts-ignore
         let requestUser : IUser = await userTable.findById(user.id);
         let orders : IOrder[] = await orderTable.find({email : requestUser.email});
         /*console.log(orders)*/

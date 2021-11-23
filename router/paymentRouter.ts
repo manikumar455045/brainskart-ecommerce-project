@@ -20,8 +20,8 @@ paymentRouter.post("/checkout" , VerifyToken , cors() , async (request : express
         let paymentBody = request.body;
         const idempotencyKey = v4();
         let payUser : any = request.headers['user']
-        let requser  : IUser = await userTable.findById(payUser.id)
         // @ts-ignore
+        let requser  : IUser  = await userTable.findById(payUser.id);
         stripe.customers.create({
             name : paymentBody.customer.name,
             address : requser.address,
