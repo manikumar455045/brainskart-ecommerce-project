@@ -75,9 +75,9 @@ let ProductDetail : React.FC<IProps> = () => {
                                         </div>
                                     </form>
                                     <hr/>
-                                    <p className='lead'><span className='h3'>Details :</span> {ProductState.product.usage}</p>
+                                    <p className='lead'><span className='h3'>Details :</span> {ProductState.product.description}</p>
                                     <hr/>
-                                    <p className='lead'><span className='h3'>Usage :</span> {ProductState.product.description}</p>
+                                    <p className='lead'><span className='h3'>Usage :</span> {ProductState.product.usage}</p>
                                 </div>
                             </div>
                         </div>

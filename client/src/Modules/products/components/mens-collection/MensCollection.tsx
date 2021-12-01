@@ -41,7 +41,7 @@ let MensCollection : React.FC<IProps> = () => {
                                     productState.products.map((product) => {
                                         return(
                                             <React.Fragment>
-                                                <div key = {product._id} className="col-md-3">
+                                                <div key = {product._id} className="col-md-4 mt-3">
                                                     <div className="card text-center">
                                                         <Link to={`/products/${product._id}`}><img src={product.image} className="img-fluid" alt=""/></Link>
                                                         <div className="card-body text-center">

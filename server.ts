@@ -6,6 +6,7 @@ import userRouter from "./router/userRouter";
 import productRouter from "./router/productRouter";
 import orderRouter from "./router/orderRouter";
 import paymentRouter from "./router/paymentRouter";
+import bodyParser from "body-parser";
 
 
 const app : express.Application = express();
@@ -18,7 +19,7 @@ dotEnv.config({
 
 //configure mongodb
 
-let dbUrl : string | undefined= process.env.MONGO_DB_LOCAL;
+let dbUrl : string | undefined= process.env.MONGO_DB_CLOUD_LOCAL;
 if(dbUrl){
     mongoose.connect(dbUrl, {
         useCreateIndex : true,
@@ -38,6 +39,8 @@ if(dbUrl){
 app.use(express.json());
 //configure cors
 app.use(cors());
+
+app.use(bodyParser({limit: '50mb'}));
 
 const port = process.env.PORT || 5000;
 
