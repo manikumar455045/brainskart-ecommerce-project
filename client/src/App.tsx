@@ -19,6 +19,7 @@ import PrivateRoute from "./router/PrivateRoute";
 import * as userActions from "./redux/users/user.action";
 import {useDispatch} from "react-redux";
 import ProductDetail from "./Modules/products/components/product-details/ProductDetail";
+import Footer from "./Modules/layout/components/home/Footer";
 let App = () => {
     let dispatch =useDispatch();
     useEffect(() => {
@@ -44,6 +45,7 @@ let App = () => {
              <Route exact path="/users/register" component={UserRegister}/>
          <PrivateRoute exact path="/users/profile" component={UserProfile}/>
      </Switch>
+         <Footer/>
      </BrowserRouter>
    </React.Fragment>
  ) 
